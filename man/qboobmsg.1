@@ -1,0 +1,97 @@
+.\" -*- coding: utf-8 -*-
+.TH QBOOBMSG 1 "03 August 2013" "qboobmsg 0\&.g"
+.SH NAME
+qboobmsg \- send and receive message threads
+.SH SYNOPSIS
+.B qboobmsg
+[\-h] [\-dqv] [\-b \fIbackends\fR] ...
+.br
+.B qboobmsg
+[\-\-help] [\-\-version]
+
+.SH DESCRIPTION
+.LP
+
+Qt application allowing to read messages on various websites and reply to them.
+
+.SS Supported websites:
+* aum ("Adopte un Mec" French dating website)
+.br
+* bnporc (BNP Paribas French bank website)
+.br
+* bouygues (Bouygues Télécom French mobile phone provider)
+.br
+* dlfp (Da Linux French Page news website)
+.br
+* ecrans (Écrans French news website)
+.br
+* fourchan (4chan image board)
+.br
+* hds (Histoires de Sexe French erotic novels)
+.br
+* hellobank (Hello Bank ! website)
+.br
+* inrocks (Les Inrocks French news website)
+.br
+* lefigaro (Le Figaro French newspaper website)
+.br
+* minutes20 (2 Minutes French newspaper website)
+.br
+* newsfeed (Loads RSS and Atom feeds from any website)
+.br
+* okc (OkCupid dating website)
+.br
+* orange (Orange French mobile phone provider)
+.br
+* phpbb (phpBB forum)
+.br
+* presseurop (Presseurop website)
+.br
+* sfr (SFR French mobile phone provider)
+.br
+* taz (Taz newspaper website)
+.SH OPTIONS
+.TP
+\fB\-\-version\fR
+show program's version number and exit
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show this help message and exit
+.TP
+\fB\-b BACKENDS\fR, \fB\-\-backends=BACKENDS\fR
+what backend(s) to enable (comma separated)
+.TP
+\fB\-e EXCLUDE_BACKENDS\fR, \fB\-\-exclude\-backends=EXCLUDE_BACKENDS\fR
+what backend(s) to exclude (comma separated)
+.TP
+\fB\-I\fR, \fB\-\-insecure\fR
+do not validate SSL
+
+.SH LOGGING OPTIONS
+.TP
+\fB\-d\fR, \fB\-\-debug\fR
+display debug messages
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+display only error messages
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+display info messages
+.TP
+\fB\-\-logging\-file=LOGGING_FILE\fR
+file to save logs
+.TP
+\fB\-a\fR, \fB\-\-save\-responses\fR
+save every response
+
+.SH COPYRIGHT
+Copyright(C) 2010-2011 Romain Bignon
+.LP
+For full COPYRIGHT see COPYING file with weboob package.
+.LP
+.RE
+.SH FILES
+"~/.config/weboob/backends" 
+
+.SH SEE ALSO
+Home page: http://weboob.org/applications/qboobmsg

@@ -1,0 +1,143 @@
+.\" -*- coding: utf-8 -*-
+.TH MONBOOB 1 "03 August 2013" "monboob 0\&.g"
+.SH NAME
+monboob \- daemon to send and check messages
+.SH SYNOPSIS
+.B monboob
+[\-dqv] [\-b \fIbackends\fR] [\-cnfs] [\fIcommand\fR [\fIarguments\fR..]]
+.br
+.B monboob
+[\-\-help] [\-\-version]
+
+.SH DESCRIPTION
+.LP
+
+Daemon allowing to regularly check for new messages on various websites, and send an email for each message, and post a reply to a message on a website.
+
+.SS Supported websites:
+* aum ("Adopte un Mec" French dating website)
+.br
+* bnporc (BNP Paribas French bank website)
+.br
+* bouygues (Bouygues Télécom French mobile phone provider)
+.br
+* dlfp (Da Linux French Page news website)
+.br
+* ecrans (Écrans French news website)
+.br
+* fourchan (4chan image board)
+.br
+* hds (Histoires de Sexe French erotic novels)
+.br
+* hellobank (Hello Bank ! website)
+.br
+* inrocks (Les Inrocks French news website)
+.br
+* lefigaro (Le Figaro French newspaper website)
+.br
+* minutes20 (2 Minutes French newspaper website)
+.br
+* newsfeed (Loads RSS and Atom feeds from any website)
+.br
+* okc (OkCupid dating website)
+.br
+* orange (Orange French mobile phone provider)
+.br
+* phpbb (phpBB forum)
+.br
+* presseurop (Presseurop website)
+.br
+* sfr (SFR French mobile phone provider)
+.br
+* taz (Taz newspaper website)
+.SH MONBOOB COMMANDS
+.TP
+\fBonce\fR
+.br
+Send mails only once, then exit.
+.TP
+\fBpost\fR
+.br
+Pipe with a mail to post message.
+.TP
+\fBrun\fR
+.br
+Run the fetching daemon.
+
+.SH OPTIONS
+.TP
+\fB\-\-version\fR
+show program's version number and exit
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show this help message and exit
+.TP
+\fB\-b BACKENDS\fR, \fB\-\-backends=BACKENDS\fR
+what backend(s) to enable (comma separated)
+.TP
+\fB\-e EXCLUDE_BACKENDS\fR, \fB\-\-exclude\-backends=EXCLUDE_BACKENDS\fR
+what backend(s) to exclude (comma separated)
+.TP
+\fB\-I\fR, \fB\-\-insecure\fR
+do not validate SSL
+
+.SH MONBOOB OPTIONS
+.TP
+\fB\-S SMTPD\fR, \fB\-\-smtpd=SMTPD\fR
+run a fake smtpd server and set the port
+
+.SH LOGGING OPTIONS
+.TP
+\fB\-d\fR, \fB\-\-debug\fR
+display debug messages
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+display only error messages
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+display info messages
+.TP
+\fB\-\-logging\-file=LOGGING_FILE\fR
+file to save logs
+.TP
+\fB\-a\fR, \fB\-\-save\-responses\fR
+save every response
+
+.SH RESULTS OPTIONS
+.TP
+\fB\-c CONDITION\fR, \fB\-\-condition=CONDITION\fR
+filter result items to display given a boolean expression
+.TP
+\fB\-n COUNT\fR, \fB\-\-count=COUNT\fR
+limit number of results (from each backends)
+.TP
+\fB\-s SELECT\fR, \fB\-\-select=SELECT\fR
+select result item keys to display (comma separated)
+
+.SH FORMATTING OPTIONS
+.TP
+\fB\-f FORMATTER\fR, \fB\-\-formatter=FORMATTER\fR
+select output formatter (csv, htmltable, json, multiline, simple, table, webkit)
+.TP
+\fB\-\-no\-header\fR
+do not display header
+.TP
+\fB\-\-no\-keys\fR
+do not display item keys
+.TP
+\fB\-O OUTFILE\fR, \fB\-\-outfile=OUTFILE\fR
+file to export result
+
+.SH COPYRIGHT
+Copyright(C) 2010-2011 Romain Bignon
+.LP
+For full COPYRIGHT see COPYING file with weboob package.
+.LP
+.RE
+.SH FILES
+"~/.config/weboob/backends" 
+
+"~/.config/weboob/monboob"
+
+.SH SEE ALSO
+Home page: http://weboob.org/applications/monboob

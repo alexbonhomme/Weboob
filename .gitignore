@@ -1,0 +1,12 @@
+*_ui.py
+*.pyc
+*.swp
+Session.vim
+build
+dist
+*.egg-info
+*~
+tags
+docs/source/api
+modules/modules.list
+/localconfig

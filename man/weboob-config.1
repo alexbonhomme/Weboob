@@ -1,0 +1,144 @@
+.\" -*- coding: utf-8 -*-
+.TH WEBOOB-CONFIG 1 "03 August 2013" "weboob-config 0\&.g"
+.SH NAME
+weboob-config \- manage backends or register new accounts
+.SH SYNOPSIS
+.B weboob\-config
+[\-dqv] [\-b \fIbackends\fR] [\-cnfs] [\fIcommand\fR [\fIarguments\fR..]]
+.br
+.B weboob\-config
+[\-\-help] [\-\-version]
+
+.SH DESCRIPTION
+.LP
+
+Weboob\-Config is a console application to add/edit/remove backends, and to register new website accounts.
+
+.SH WEBOOB\-CONFIG COMMANDS
+.TP
+\fBadd\fR \fINAME\fR [\fIOPTIONS\fR ...]
+.br
+Add a backend.
+.TP
+\fBapplications\fR
+.br
+Show applications.
+.TP
+\fBconfirm\fR \fIBACKEND\fR
+.br
+For a backend which support CapAccount, parse a confirmation mail
+.br
+after using the 'register' command to automatically confirm the
+.br
+subscribe.
+.br
+
+.br
+It takes mail from stdin. Use it with postfix for example.
+.TP
+\fBdisable\fR \fIBACKEND\fR
+.br
+Disable a backend
+.TP
+\fBedit\fR \fIBACKEND\fR
+.br
+Edit a backend
+.TP
+\fBenable\fR \fIBACKEND\fR
+.br
+Enable a disabled backend
+.TP
+\fBinfo\fR \fINAME\fR
+.br
+Display information about a module.
+.TP
+\fBlist\fR [\fICAPS\fR ..]
+.br
+Show backends.
+.TP
+\fBmodules\fR [\fICAPS\fR ...]
+.br
+Show available modules.
+.TP
+\fBregister\fR \fIMODULE\fR
+.br
+Register a new account on a module.
+.TP
+\fBremove\fR \fINAME\fR
+.br
+Remove a backend.
+.TP
+\fBupdate\fR
+.br
+Update weboob.
+
+.SH OPTIONS
+.TP
+\fB\-\-version\fR
+show program's version number and exit
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show this help message and exit
+.TP
+\fB\-b BACKENDS\fR, \fB\-\-backends=BACKENDS\fR
+what backend(s) to enable (comma separated)
+.TP
+\fB\-e EXCLUDE_BACKENDS\fR, \fB\-\-exclude\-backends=EXCLUDE_BACKENDS\fR
+what backend(s) to exclude (comma separated)
+.TP
+\fB\-I\fR, \fB\-\-insecure\fR
+do not validate SSL
+
+.SH LOGGING OPTIONS
+.TP
+\fB\-d\fR, \fB\-\-debug\fR
+display debug messages
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+display only error messages
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+display info messages
+.TP
+\fB\-\-logging\-file=LOGGING_FILE\fR
+file to save logs
+.TP
+\fB\-a\fR, \fB\-\-save\-responses\fR
+save every response
+
+.SH RESULTS OPTIONS
+.TP
+\fB\-c CONDITION\fR, \fB\-\-condition=CONDITION\fR
+filter result items to display given a boolean expression
+.TP
+\fB\-n COUNT\fR, \fB\-\-count=COUNT\fR
+limit number of results (from each backends)
+.TP
+\fB\-s SELECT\fR, \fB\-\-select=SELECT\fR
+select result item keys to display (comma separated)
+
+.SH FORMATTING OPTIONS
+.TP
+\fB\-f FORMATTER\fR, \fB\-\-formatter=FORMATTER\fR
+select output formatter (csv, htmltable, json, multiline, simple, table, webkit)
+.TP
+\fB\-\-no\-header\fR
+do not display header
+.TP
+\fB\-\-no\-keys\fR
+do not display item keys
+.TP
+\fB\-O OUTFILE\fR, \fB\-\-outfile=OUTFILE\fR
+file to export result
+
+.SH COPYRIGHT
+Copyright(C) 2010-2012 Christophe Benz, Romain Bignon
+.LP
+For full COPYRIGHT see COPYING file with weboob package.
+.LP
+.RE
+.SH FILES
+"~/.config/weboob/backends" 
+
+.SH SEE ALSO
+Home page: http://weboob.org/applications/weboob-config
