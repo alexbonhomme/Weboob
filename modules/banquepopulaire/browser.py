@@ -36,6 +36,7 @@ class BanquePopulaire(BaseBrowser):
              'https://[^/]+/cyber/internet/StartTask.do\?taskInfoOID=mesComptes.*':             AccountsPage,
              'https://[^/]+/cyber/internet/StartTask.do\?taskInfoOID=maSyntheseGratuite.*':     AccountsPage,
              'https://[^/]+/cyber/internet/StartTask.do\?taskInfoOID=accueilSynthese.*':        AccountsPage,
+             'https://[^/]+/cyber/internet/ContinueTask.do\?.*dialogActionPerformed=EQUIPEMENT_COMPLET.*': AccountsPage,
              'https://[^/]+/cyber/internet/ContinueTask.do\?.*dialogActionPerformed=SOLDE.*':   TransactionsPage,
              'https://[^/]+/cyber/internet/Page.do\?.*':                                        TransactionsPage,
              'https://[^/]+/cyber/internet/Sort.do\?.*':                                        TransactionsPage,
@@ -87,6 +88,14 @@ class BanquePopulaire(BaseBrowser):
         if self.page.is_error():
             raise BrokenPageError('Unable to go on the accounts list page')
 
+        if self.page.is_short_list():
+            self.select_form(nr=0)
+            self.set_all_readonly(False)
+            self['dialogActionPerformed'] = 'EQUIPEMENT_COMPLET'
+            self.submit()
+
+        self.token = self.page.get_token()
+
         return self.page.get_list()
 
     def get_account(self, id):
@@ -102,7 +111,15 @@ class BanquePopulaire(BaseBrowser):
     def get_history(self, account):
         if not self.is_on_page(AccountsPage):
             account = self.get_account(account.id)
+
+        if account._params is None:
+            return
+
         self.location('/cyber/internet/ContinueTask.do', urllib.urlencode(account._params))
+        self.token = self.page.get_token()
+
+        if self.page.no_operations():
+            return
 
         # Sort by values dates (see comment in TransactionsPage.get_history)
         self.select_form(predicate=lambda form: form.attrs.get('id', '') == 'myForm')
@@ -111,6 +128,7 @@ class BanquePopulaire(BaseBrowser):
 
         while True:
             assert self.is_on_page(TransactionsPage)
+            self.token = self.page.get_token()
 
             for tr in self.page.get_history():
                 yield tr

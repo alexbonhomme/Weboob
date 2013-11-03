@@ -23,7 +23,7 @@ from decimal import Decimal
 import re
 from mechanize import Cookie
 
-from weboob.tools.browser import BasePage, BrowserUnavailable, BrokenPageError
+from weboob.tools.browser import BasePage as _BasePage, BrowserUnavailable, BrokenPageError
 from weboob.capabilities.bank import Account
 from weboob.tools.capabilities.bank.transactions import FrenchTransaction
 
@@ -53,6 +53,11 @@ class WikipediaARC4(object):
             self.state[self.x], self.state[self.y] = self.state[self.y], self.state[self.x]
             output[i] = chr((ord(input[i]) ^ self.state[(self.state[self.x] + self.state[self.y]) & 0xFF]))
         return ''.join(output)
+
+
+class BasePage(_BasePage):
+    def get_token(self):
+        return self.parser.select(self.document.getroot(), '//form//input[@name="token"]', 1, 'xpath').attrib['value']
 
 
 class RedirectPage(BasePage):
@@ -195,7 +200,10 @@ class HomePage(BasePage):
 
 class AccountsPage(BasePage):
     ACCOUNT_TYPES = {u'Mes comptes d\'épargne':     Account.TYPE_SAVINGS,
+                     u'Mon épargne':                Account.TYPE_SAVINGS,
                      u'Mes comptes':                Account.TYPE_CHECKING,
+                     u'Mes emprunts':               Account.TYPE_LOAN,
+                     u'Mes services':               None,    # ignore this kind of accounts (no bank ones)
                     }
 
     def is_error(self):
@@ -204,6 +212,9 @@ class AccountsPage(BasePage):
                 return True
 
         return False
+
+    def is_short_list(self):
+        return len(self.document.xpath('//script[contains(text(), "EQUIPEMENT_COMPLET")]')) > 0
 
     def get_list(self):
         account_type = Account.TYPE_UNKNOWN
@@ -214,6 +225,10 @@ class AccountsPage(BasePage):
 
         for div in self.document.xpath('//div[@class="btit"]'):
             account_type = self.ACCOUNT_TYPES.get(div.text.strip(), Account.TYPE_UNKNOWN)
+
+            if account_type is None:
+                # ignore services accounts
+                continue
 
             for tr in div.getnext().xpath('.//tbody/tr'):
                 if not 'id' in tr.attrib:
@@ -231,12 +246,20 @@ class AccountsPage(BasePage):
                 account.label = u' '.join([u''.join([txt.strip() for txt in tds[1].itertext()]),
                                            u''.join([txt.strip() for txt in tds[2].itertext()])]).strip()
                 account.type = account_type
-                balance = u''.join([txt.strip() for txt in tds[3].itertext()])
-                account.balance = Decimal(FrenchTransaction.clean_amount(balance))
+
+                balance = FrenchTransaction.clean_amount(u''.join([txt.strip() for txt in tds[3].itertext()]))
+                account.balance = Decimal(balance or '0.0')
                 account.currency = account.get_currency(balance)
-                account._params = params.copy()
-                account._params['dialogActionPerformed'] = 'SOLDE'
-                account._params['attribute($SEL_$%s)' % tr.attrib['id'].split('_')[0]] = tr.attrib['id'].split('_', 1)[1]
+                if account.type == account.TYPE_LOAN:
+                    account.balance = - abs(account.balance)
+
+                if balance == u'':
+                    # There is no detail
+                    account._params = None
+                else:
+                    account._params = params.copy()
+                    account._params['dialogActionPerformed'] = 'SOLDE'
+                    account._params['attribute($SEL_$%s)' % tr.attrib['id'].split('_')[0]] = tr.attrib['id'].split('_', 1)[1]
                 yield account
 
         return
@@ -315,3 +338,11 @@ class TransactionsPage(BasePage):
             t.parse(date, re.sub(r'[ ]+', ' ', raw), vdate)
             t.set_amount(credit, debit)
             yield t
+
+    def no_operations(self):
+        if len(self.document.xpath('//table[@id="tbl1"]//td[@colspan]')) > 0:
+            return True
+        if len(self.document.xpath(u'//div[contains(text(), "Accès à LineBourse")]')) > 0:
+            return True
+
+        return False

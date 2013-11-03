@@ -63,11 +63,9 @@ class IndexPage(BasePage):
                 else:
                     raise BrokenPageError('Unable to parse duration %r' % self.parser.select(div, 'div.duration', 1).text)
                 video.duration = datetime.timedelta(hours=int(hours), minutes=int(minutes), seconds=int(seconds))
-            url = unicode(self.parser.select(div, 'img.dmco_image', 1).attrib['data-src'])
+            url = unicode(self.parser.select(div, 'img.preview', 1).attrib['data-src'])
             # remove the useless anti-caching
             url = re.sub('\?\d+', '', url)
-            # use the bigger thumbnail
-            url = url.replace('jpeg_preview_medium.jpg', 'jpeg_preview_large.jpg')
             video.thumbnail = Thumbnail(unicode(url))
 
             video.set_empty_fields(NotAvailable, ('url',))
@@ -98,7 +96,7 @@ class VideoPage(BasePage):
 
         embed_page = self.browser.readurl('http://www.dailymotion.com/embed/video/%s' % video.id)
 
-        m = re.search('var info = ({.*?}),', embed_page)
+        m = re.search('var info = ({.*?}),[^{"]', embed_page)
         if not m:
             raise BrokenPageError('Unable to find information about video')
 
