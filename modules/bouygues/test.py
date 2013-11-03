@@ -26,3 +26,7 @@ class BouyguesTest(BackendTest):
 
     def test_bouygues(self):
         pass
+
+    def test_create_default_browser(self):
+        connect = self.backend.create_default_browser()
+        assert connect
